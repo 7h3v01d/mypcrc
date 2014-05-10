@@ -12,6 +12,10 @@
 #include <arpa/inet.h>
 #include <errno.h>
 
+#include <X11/Xlib.h>
+#include <X11/Xdmcp.h>
+#include <X11/keysym.h>
+
 
 #define UNUSED( x ) ( (void)x )
 #define STRLEN( s ) ( sizeof(s)-1 )
@@ -40,9 +44,17 @@ static void client_shutdown( void );
 static void client_dump_bytes( char *data, int size );
 static void client_parse( char *data, int size );
 
+static void x11_send_keystroke( void );
+
 
 int main( int argc, char **argv )
 {
+//////////////////////////////////////////
+	x11_send_keystroke();		//
+	if( NULL != argv ) {		//
+		return EXIT_SUCCESS;	//
+	}				//
+//////////////////////////////////////////
 	if( 2 == argc &&
 	    (0 == strcmp("-h", argv[1]) ||
 	     0 == strcmp("--help", argv[1])) ) {
@@ -320,4 +332,50 @@ static void client_parse( char *data, int size )
 		syslog( LOG_ERR, "unknown command from client" );
 		client_shutdown();
 	}
+}
+
+static void x11_send_keystroke( void )
+{
+	Display *d = XOpenDisplay( NULL );
+	if( NULL == d ) {
+		return;
+	}
+
+	Window root;
+	Window prnt;
+	Window *chld;
+	unsigned int size;
+
+	if( 0 != XQueryTree(d, XDefaultRootWindow(d), &root, &prnt, &chld, &size) ) {
+		for( unsigned int i = 0; i < size; ++i ) {
+			char *name;
+			if( 0 != XFetchName(d, chld[i], &name) ) {
+				if( 0 == strcmp("vlc", name) ) {
+					XEvent event;
+					event.xkey.type = KeyPress;
+					event.xkey.serial = 0;
+					event.xkey.send_event = TRUE;
+					event.xkey.display = d;
+					event.xkey.window = chld[i];
+					event.xkey.root = XDefaultRootWindow(d);
+					event.xkey.subwindow = 0;
+					event.xkey.time = 0;
+					event.xkey.x = 0;
+					event.xkey.y = 0;
+					event.xkey.x_root = 0;
+					event.xkey.y_root = 0;
+					event.xkey.state = ControlMask;
+					event.xkey.keycode = XK_O;
+					event.xkey.same_screen = TRUE;
+					if( 0 != XSendEvent(d, chld[i], FALSE, 0, &event) ) {
+						printf( "Ctrl+O failed\n" );
+					}
+					//break;
+				}
+			}
+		}
+		XFree( chld );
+	}
+
+	XCloseDisplay( d );
 }

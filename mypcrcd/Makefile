@@ -1,5 +1,5 @@
 all:
-	gcc -Wall -Wextra -std=gnu99 -ggdb -omypcrcd mypcrcd.c
+	gcc -Wall -Wextra -std=gnu99 -ggdb -omypcrcd mypcrcd.c -lX11
 
 clean:
 	rm -f mypcrcd
