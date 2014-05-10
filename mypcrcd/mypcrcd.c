@@ -175,7 +175,8 @@ static void client_handle( void )
 	char data[MYPCRC_BUFF+1];
 
 
-	while( 0 != run ) {
+	while( 0 != run &&
+	       -1 != fd ) {
 		ssize_t size = read( fd, data, sizeof(data)-1 );
 		if( 0 == size ) {
 			break;
