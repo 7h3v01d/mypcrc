@@ -270,21 +270,21 @@ static void client_dump_bytes( char *data, int size )
 
 static void client_parse( char *data, int size )
 {
-	if( 0 == memcmp("QUIT\r\n", data, size) ) {
+	if( 0 == strncmp("QUIT\r\n", data, size) ) {
 		client_shutdown();
 	}
 	else
-	if( 0 == memcmp("PING\r\n", data, size) ) {
+	if( 0 == strncmp("PING\r\n", data, size) ) {
 		/* Do nothing. */
 	}
 	else
-	if( 0 == memcmp("AUTH ", data, size) ) {
+	if( 0 == strncmp("AUTH ", data, size) ) {
 		if( 0 != auth ) {
 			return;
 		}
 	}
 	else
-	if( 0 == memcmp("FUNC ", data, size) ) {
+	if( 0 == strncmp("FUNC ", data, size) ) {
 		if( 0 == auth ) {
 			syslog( LOG_ERR, "unauthenticated client sent function" );
 			client_shutdown();
