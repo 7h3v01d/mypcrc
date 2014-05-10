@@ -14,6 +14,7 @@
 
 
 #define UNUSED( x ) ( (void)x )
+#define STRLEN( s ) ( sizeof(s)-1 )
 
 #define MYPCRC_PORT 10101
 #define MYPCRC_BUFF 64
@@ -187,7 +188,7 @@ static void client_handle( void )
 			break;
 		}
 
-		data[MYPCRC_BUFF] = '\0';
+		data[size] = '\0';
 
 		client_dump_bytes( data, size );
 
@@ -270,23 +271,47 @@ static void client_dump_bytes( char *data, int size )
 
 static void client_parse( char *data, int size )
 {
-	if( 0 == strncmp("QUIT\r\n", data, size) ) {
+	UNUSED( size );
+
+
+	if( 0 == strcmp("QUIT\r\n", data) ) {
 		client_shutdown();
 	}
 	else
-	if( 0 == strncmp("PING\r\n", data, size) ) {
+	if( 0 == strcmp("PING\r\n", data) ) {
 		/* Do nothing. */
 	}
 	else
-	if( 0 == strncmp("AUTH ", data, size) ) {
+	if( 0 == strncmp("AUTH ", data, STRLEN("AUTH ")) ) {
 		if( 0 != auth ) {
+			return;
+		}
+		if( 0 == strncmp(MYPCRC_PASS, data+STRLEN("AUTH "), STRLEN(MYPCRC_PASS)) &&
+		    0 == strcmp("\r\n", data+STRLEN("AUTH ")+STRLEN(MYPCRC_PASS)) ) {
+		    auth = !0;
+		}
+		else {
+			syslog( LOG_ERR, "client authentication failed" );
+			client_shutdown();
 			return;
 		}
 	}
 	else
-	if( 0 == strncmp("FUNC ", data, size) ) {
+	if( 0 == strncmp("FUNC ", data, STRLEN("FUNC ")) ) {
 		if( 0 == auth ) {
 			syslog( LOG_ERR, "unauthenticated client sent function" );
+			client_shutdown();
+			return;
+		}
+		if( 0 == strncmp("stop\r\n", data+STRLEN("FUNC "), STRLEN("stop\r\n")) ) {
+		    /* TODO: stop */
+		}
+		else
+		if( 0 == strncmp("play\r\n", data+STRLEN("FUNC "), STRLEN("play\r\n")) ) {
+		    /* TODO: play */
+		}
+		else {
+			syslog( LOG_ERR, "unknown function from client" );
 			client_shutdown();
 			return;
 		}
