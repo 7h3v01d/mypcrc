@@ -22,3 +22,6 @@ tail:
 	@tail -f /var/log/syslog
 
 demo: all run show tail
+
+commit:
+	git commit -a --allow-empty-message
