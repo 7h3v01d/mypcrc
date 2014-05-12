@@ -202,9 +202,9 @@ static void client_handle( void )
 		}
 
 		data[size] = '\0';
-
+#ifdef DEBUG
 		client_dump_bytes( data, size );
-
+#endif
 		client_parse( data, size );
 	}
 
@@ -220,6 +220,7 @@ static void client_shutdown( void )
 	}
 }
 
+#ifdef DEBUG
 static void client_dump_bytes( char *data, int size )
 {
 	if( NULL == data ) {
@@ -281,6 +282,7 @@ static void client_dump_bytes( char *data, int size )
 
 	free( buf );
 }
+#endif
 
 static void client_parse( char *data, int size )
 {
