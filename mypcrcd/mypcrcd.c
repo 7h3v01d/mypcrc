@@ -395,6 +395,22 @@ static void x11_send_keystroke( int ctrl, int alt, int shift, KeySym key )
 		return;
 	}
 
+	Window w;
+	int r;
+	XGetInputFocus( d, &w, &r );
+
+	char *n;
+	if( 0 != XFetchName(d, w, &n) ) {
+		if( 0 != strcmp("vlc", n) ) {
+			XCloseDisplay( d );
+			return;
+		}
+	}
+	else {
+		XCloseDisplay( d );
+		return;
+	}
+
 	if( 0 != ctrl ) {
 		XTestFakeKeyEvent( d, XKeysymToKeycode(d, XK_Control_L), True, CurrentTime);
 	}
