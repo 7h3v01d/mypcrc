@@ -14,6 +14,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
+#include <X11/XF86keysym.h>
 #include <X11/extensions/XTest.h>
 
 
@@ -317,7 +318,7 @@ static void client_parse( char *data, int size )
 		}
 		#define IS_FUNC( s ) ( 0 == strncmp(s, data+STRLEN("FUNC "), STRLEN(s)) )
 		if( IS_FUNC("quit\r\n") ) {
-		    x11_send_keystroke( !0, 0, 0, XK_Q ); /* Ctrl+Q */
+			x11_send_keystroke( !0, 0, 0, XK_Q ); /* Ctrl+Q */
 		}
 		else
 		if( IS_FUNC("stop\r\n") ) {
@@ -325,51 +326,54 @@ static void client_parse( char *data, int size )
 		}
 		else
 		if( IS_FUNC("play-pause\r\n") ) {
-		    x11_send_keystroke( 0, 0, 0, XK_space ); /* space */
+			x11_send_keystroke( 0, 0, 0, XK_space ); /* space */
 		}
 		else
 		if( IS_FUNC("play\r\n") ) {
-		    x11_send_keystroke( 0, 0, 0, XK_bracketright ); /* ] */
+			x11_send_keystroke( 0, 0, 0, XK_bracketright ); /* ] */
 		}
 		else
 		if( IS_FUNC("pause\r\n") ) {
-		    x11_send_keystroke( 0, 0, 0, XK_bracketleft ); /* [ */
+			x11_send_keystroke( 0, 0, 0, XK_bracketleft ); /* [ */
 		}
 		else
 		if( IS_FUNC("toggle-fullscreen\r\n") ) {
-		    x11_send_keystroke( 0, 0, 0, XK_F ); /* f */
+			x11_send_keystroke( 0, 0, 0, XK_F ); /* f */
 		}
 		else
 		if( IS_FUNC("leave-fullscreen\r\n") ) {
-		    x11_send_keystroke( 0, 0, 0, XK_Escape ); /* escape */
+			x11_send_keystroke( 0, 0, 0, XK_Escape ); /* escape */
 		}
 		else
 		if( IS_FUNC("vol-mute\r\n") ) {
-		    x11_send_keystroke( 0, 0, 0, XK_M ); /* m */
+			/* x11_send_keystroke( 0, 0, 0, XK_M ); */ /* m */
+			x11_send_keystroke( 0, 0, 0, XF86XK_AudioMute );
 		}
 		else
 		if( IS_FUNC("vol-up\r\n") ) {
-		    x11_send_keystroke( !0, 0, 0, XK_Up ); /* Ctrl+Up */
+			/* x11_send_keystroke( !0, 0, 0, XK_Up ); */ /* Ctrl+Up */
+			x11_send_keystroke( !0, 0, 0, XF86XK_AudioRaiseVolume );
 		}
 		else
 		if( IS_FUNC("vol-down\r\n") ) {
-		    x11_send_keystroke( !0, 0, 0, XK_Down ); /* Ctrl+Down */
+			/* x11_send_keystroke( !0, 0, 0, XK_Down ); */ /* Ctrl+Down */
+			x11_send_keystroke( !0, 0, 0, XF86XK_AudioLowerVolume ); 
 		}
 		else
 		if( IS_FUNC("jump-extrashort\r\n") ) {
-		    x11_send_keystroke( 0, 0, !0, XK_Left ); /* Shift+Left */
+			x11_send_keystroke( 0, 0, !0, XK_Left ); /* Shift+Left */
 		}
 		else
 		if( IS_FUNC("jump+extrashort\r\n") ) {
-		    x11_send_keystroke( 0, 0, !0, XK_Right ); /* Shift+Right */
+			x11_send_keystroke( 0, 0, !0, XK_Right ); /* Shift+Right */
 		}
 		else
 		if( IS_FUNC("jump-medium\r\n") ) {
-		    x11_send_keystroke( !0, 0, 0, XK_Left ); /* Ctrl+Left */
+			x11_send_keystroke( !0, 0, 0, XK_Left ); /* Ctrl+Left */
 		}
 		else
 		if( IS_FUNC("jump+medium\r\n") ) {
-		    x11_send_keystroke( !0, 0, 0, XK_Right ); /* Ctrl+Right */
+			x11_send_keystroke( !0, 0, 0, XK_Right ); /* Ctrl+Right */
 		}
 		else {
 			syslog( LOG_ERR, "unknown function from client" );
