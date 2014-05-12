@@ -34,6 +34,8 @@ static int auth =  0;
 
 static void help( void );
 
+static void x11_send_keystroke( int ctrl, int alt, int shift, KeySym key );
+
 static void terminate( int sig );
 
 static int server_init( void );
@@ -44,8 +46,6 @@ static void client_handle( void );
 static void client_shutdown( void );
 static void client_dump_bytes( char *data, int size );
 static void client_parse( char *data, int size );
-
-static void x11_send_keystroke( int ctrl, int alt, int shift, KeySym key );
 
 
 int main( int argc, char **argv )
@@ -98,6 +98,63 @@ static void help( void )
 		"options:\n"
 		"  -h, --help  show this help\n"
 	);
+}
+
+static void x11_send_keystroke( int ctrl, int alt, int shift, KeySym key )
+{
+	Display *d = XOpenDisplay( NULL );
+	if( NULL == d ) {
+		return;
+	}
+
+	Window w;
+	int r;
+	XGetInputFocus( d, &w, &r );
+
+	char *n;
+	if( 0 != XFetchName(d, w, &n) ) {
+		if( 0 == strstr(n, "VLC media player") ) {
+			XFree( n );
+			XCloseDisplay( d );
+			return;
+		}
+		XFree( n );
+	}
+	else {
+		XCloseDisplay( d );
+		return;
+	}
+
+	if( 0 != ctrl ) {
+		XTestFakeKeyEvent( d, XKeysymToKeycode(d, XK_Control_L), True, CurrentTime);
+	}
+
+	if( 0 != alt ) {
+		XTestFakeKeyEvent( d, XKeysymToKeycode(d, XK_Alt_L), True, CurrentTime);
+	}
+
+	if( 0 != shift ) {
+		XTestFakeKeyEvent( d, XKeysymToKeycode(d, XK_Shift_L), True, CurrentTime);
+	}
+
+	if( 0 != key ) {
+		XTestFakeKeyEvent( d, XKeysymToKeycode(d, key), True, CurrentTime);
+		XTestFakeKeyEvent( d, XKeysymToKeycode(d, key), False, CurrentTime);
+	}
+
+	if( 0 != alt ) {
+		XTestFakeKeyEvent( d, XKeysymToKeycode(d, XK_Alt_L), False, CurrentTime);
+	}
+
+	if( 0 != shift ) {
+		XTestFakeKeyEvent( d, XKeysymToKeycode(d, XK_Shift_L), False, CurrentTime);
+	}
+
+	if( 0 != ctrl ) {
+		XTestFakeKeyEvent( d, XKeysymToKeycode(d, XK_Control_L), False, CurrentTime);
+	}
+
+	XCloseDisplay( d );
 }
 
 static void terminate( int sig )
@@ -388,61 +445,4 @@ static void client_parse( char *data, int size )
 		syslog( LOG_ERR, "unknown command from client" );
 		client_shutdown();
 	}
-}
-
-static void x11_send_keystroke( int ctrl, int alt, int shift, KeySym key )
-{
-	Display *d = XOpenDisplay( NULL );
-	if( NULL == d ) {
-		return;
-	}
-
-	Window w;
-	int r;
-	XGetInputFocus( d, &w, &r );
-
-	char *n;
-	if( 0 != XFetchName(d, w, &n) ) {
-		if( 0 == strstr(n, "VLC media player") ) {
-			XFree( n );
-			XCloseDisplay( d );
-			return;
-		}
-		XFree( n );
-	}
-	else {
-		XCloseDisplay( d );
-		return;
-	}
-
-	if( 0 != ctrl ) {
-		XTestFakeKeyEvent( d, XKeysymToKeycode(d, XK_Control_L), True, CurrentTime);
-	}
-
-	if( 0 != alt ) {
-		XTestFakeKeyEvent( d, XKeysymToKeycode(d, XK_Alt_L), True, CurrentTime);
-	}
-
-	if( 0 != shift ) {
-		XTestFakeKeyEvent( d, XKeysymToKeycode(d, XK_Shift_L), True, CurrentTime);
-	}
-
-	if( 0 != key ) {
-		XTestFakeKeyEvent( d, XKeysymToKeycode(d, key), True, CurrentTime);
-		XTestFakeKeyEvent( d, XKeysymToKeycode(d, key), False, CurrentTime);
-	}
-
-	if( 0 != alt ) {
-		XTestFakeKeyEvent( d, XKeysymToKeycode(d, XK_Alt_L), False, CurrentTime);
-	}
-
-	if( 0 != shift ) {
-		XTestFakeKeyEvent( d, XKeysymToKeycode(d, XK_Shift_L), False, CurrentTime);
-	}
-
-	if( 0 != ctrl ) {
-		XTestFakeKeyEvent( d, XKeysymToKeycode(d, XK_Control_L), False, CurrentTime);
-	}
-
-	XCloseDisplay( d );
 }
