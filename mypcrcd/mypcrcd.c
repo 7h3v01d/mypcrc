@@ -50,12 +50,6 @@ static void client_parse( char *data, int size );
 
 int main( int argc, char **argv )
 {
-//////////////////////////////////////////////////////////
-	x11_send_keystroke( !0, 0, 0, XK_O );		//
-	if( NULL != argv ) {				//
-		return EXIT_SUCCESS;			//
-	}						//
-//////////////////////////////////////////////////////////
 	if( 2 == argc &&
 	    (0 == strcmp("-h", argv[1]) ||
 	     0 == strcmp("--help", argv[1])) ) {
