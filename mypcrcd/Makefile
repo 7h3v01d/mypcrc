@@ -25,3 +25,8 @@ demo: all run show tail
 
 commit:
 	git commit -a --allow-empty-message
+
+help:
+	@echo Required packages:
+	@echo libx11-dev
+	@echo libxext-dev
