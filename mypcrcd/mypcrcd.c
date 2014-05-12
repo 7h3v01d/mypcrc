@@ -315,26 +315,68 @@ static void client_parse( char *data, int size )
 			client_shutdown();
 			return;
 		}
-		if( 0 == strncmp("stop\r\n", data+STRLEN("FUNC "), STRLEN("stop\r\n")) ) {
-			x11_send_keystroke( 0, 0, 0, XK_S );
+		#define IS_FUNC( s ) ( 0 == strncmp(s, data+STRLEN("FUNC "), STRLEN(s)) )
+		if( IS_FUNC("quit\r\n") ) {
+		    x11_send_keystroke( !0, 0, 0, XK_Q ); /* Ctrl+Q */
 		}
 		else
-		if( 0 == strncmp("play/pause\r\n", data+STRLEN("FUNC "), STRLEN("play/pause\r\n")) ) {
-		    x11_send_keystroke( 0, 0, 0, XK_space );
+		if( IS_FUNC("stop\r\n") ) {
+			x11_send_keystroke( 0, 0, 0, XK_S ); /* s */
 		}
 		else
-		if( 0 == strncmp("play\r\n", data+STRLEN("FUNC "), STRLEN("play\r\n")) ) {
-		    x11_send_keystroke( 0, 0, 0, XK_bracketright );
+		if( IS_FUNC("play-pause\r\n") ) {
+		    x11_send_keystroke( 0, 0, 0, XK_space ); /* space */
 		}
 		else
-		if( 0 == strncmp("pause\r\n", data+STRLEN("FUNC "), STRLEN("pause\r\n")) ) {
-		    x11_send_keystroke( 0, 0, 0, XK_bracketleft );
+		if( IS_FUNC("play\r\n") ) {
+		    x11_send_keystroke( 0, 0, 0, XK_bracketright ); /* ] */
+		}
+		else
+		if( IS_FUNC("pause\r\n") ) {
+		    x11_send_keystroke( 0, 0, 0, XK_bracketleft ); /* [ */
+		}
+		else
+		if( IS_FUNC("toggle-fullscreen\r\n") ) {
+		    x11_send_keystroke( 0, 0, 0, XK_F ); /* f */
+		}
+		else
+		if( IS_FUNC("leave-fullscreen\r\n") ) {
+		    x11_send_keystroke( 0, 0, 0, XK_Escape ); /* escape */
+		}
+		else
+		if( IS_FUNC("vol-mute\r\n") ) {
+		    x11_send_keystroke( 0, 0, 0, XK_M ); /* m */
+		}
+		else
+		if( IS_FUNC("vol-up\r\n") ) {
+		    x11_send_keystroke( !0, 0, 0, XK_Up ); /* Ctrl+Up */
+		}
+		else
+		if( IS_FUNC("vol-down\r\n") ) {
+		    x11_send_keystroke( !0, 0, 0, XK_Down ); /* Ctrl+Down */
+		}
+		else
+		if( IS_FUNC("jump-extrashort\r\n") ) {
+		    x11_send_keystroke( 0, 0, !0, XK_Left ); /* Shift+Left */
+		}
+		else
+		if( IS_FUNC("jump+extrashort\r\n") ) {
+		    x11_send_keystroke( 0, 0, !0, XK_Right ); /* Shift+Right */
+		}
+		else
+		if( IS_FUNC("jump-medium\r\n") ) {
+		    x11_send_keystroke( !0, 0, 0, XK_Left ); /* Ctrl+Left */
+		}
+		else
+		if( IS_FUNC("jump+medium\r\n") ) {
+		    x11_send_keystroke( !0, 0, 0, XK_Right ); /* Ctrl+Right */
 		}
 		else {
 			syslog( LOG_ERR, "unknown function from client" );
 			client_shutdown();
 			return;
 		}
+		#undef IS_FUNC
 	}
 	else {
 		syslog( LOG_ERR, "unknown command from client" );
