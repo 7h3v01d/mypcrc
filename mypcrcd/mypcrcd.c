@@ -411,12 +411,12 @@ static void client_parse( char *data, int size )
 		else
 		if( IS_FUNC("vol-up\r\n") ) {
 			/* x11_send_keystroke( !0, 0, 0, XK_Up ); */ /* Ctrl+Up */
-			x11_send_keystroke( !0, 0, 0, XF86XK_AudioRaiseVolume );
+			x11_send_keystroke( 0, 0, 0, XF86XK_AudioRaiseVolume );
 		}
 		else
 		if( IS_FUNC("vol-down\r\n") ) {
 			/* x11_send_keystroke( !0, 0, 0, XK_Down ); */ /* Ctrl+Down */
-			x11_send_keystroke( !0, 0, 0, XF86XK_AudioLowerVolume ); 
+			x11_send_keystroke( 0, 0, 0, XF86XK_AudioLowerVolume ); 
 		}
 		else
 		if( IS_FUNC("jump-extrashort\r\n") ) {
