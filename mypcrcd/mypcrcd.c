@@ -51,7 +51,7 @@ static void x11_send_keystroke( int ctrl, int alt, int shift, KeySym key );
 int main( int argc, char **argv )
 {
 //////////////////////////////////////////////////////////
-	x11_send_keystroke( !0, 0, 0, XK_L );		//
+	x11_send_keystroke( !0, 0, 0, XK_O );		//
 	if( NULL != argv ) {				//
 		return EXIT_SUCCESS;			//
 	}						//
@@ -403,7 +403,7 @@ static void x11_send_keystroke( int ctrl, int alt, int shift, KeySym key )
 
 	char *n;
 	if( 0 != XFetchName(d, w, &n) ) {
-		if( 0 != strcmp("vlc", n) ) {
+		if( 0 == strstr(n, "VLC media player") ) {
 			XFree( n );
 			XCloseDisplay( d );
 			return;
