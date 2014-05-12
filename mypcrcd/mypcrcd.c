@@ -402,9 +402,11 @@ static void x11_send_keystroke( int ctrl, int alt, int shift, KeySym key )
 	char *n;
 	if( 0 != XFetchName(d, w, &n) ) {
 		if( 0 != strcmp("vlc", n) ) {
+			XFree( n );
 			XCloseDisplay( d );
 			return;
 		}
+		XFree( n );
 	}
 	else {
 		XCloseDisplay( d );
