@@ -107,7 +107,8 @@ static void x11_send_keystroke( int ctrl, int alt, int shift, KeySym key )
 
 	char *n;
 	if( 0 != XFetchName(d, w, &n) ) {
-		if( 0 == strstr(n, "VLC media player") ) {
+		if( STRLEN("VLC media player") > strlen(n) ||
+		    0 != strcmp("VLC media player", n+(strlen(n)-STRLEN("VLC media player"))) ) {
 			XFree( n );
 			XCloseDisplay( d );
 			return;
