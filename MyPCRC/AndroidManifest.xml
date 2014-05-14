@@ -13,8 +13,8 @@
 
     <application
         android:allowBackup="true"
-        android:label="@string/applicationName"
-        tools:ignore="MissingApplicationIcon" >
+        android:icon="@drawable/mypcrc"
+        android:label="@string/applicationName" >
         <activity
             android:name="com.thevoid.mypcrc.MyPCRC"
             android:configChanges="keyboard|keyboardHidden|orientation"
