@@ -12,7 +12,7 @@
         android:layout_height="32dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/button"
+        android:src="@android:drawable/btn_default"
         tools:ignore="ContentDescription" />
 
 </RelativeLayout>
