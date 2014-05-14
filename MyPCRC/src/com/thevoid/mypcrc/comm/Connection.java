@@ -50,6 +50,10 @@ public class Connection {
 		}
 	}
 
+	public boolean isConnected() {
+		return socket != null && !socket.isClosed() && socket.isConnected();
+	}
+
 	public void send(byte[] data) {
 
 	}

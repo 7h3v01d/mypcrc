@@ -1,19 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#FFFFFF"
+    android:background="#000000"
     android:keepScreenOn="true"
-    android:padding="12dp" >
+    android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/quit"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:src="@android:drawable/btn_default"
-        tools:ignore="ContentDescription" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/leave_fullscreen"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="0.33"
+            android:background="@color/defaultButtonBackgroundColor"
+            android:gravity="bottom|left"
+            android:padding="3dp"
+            android:text="@string/leaveFullscreenButtonText"
+            android:textColor="@color/defaultButtonTextColor"
+            android:textSize="@dimen/defaultButtonTextSize" />
+
+        <TextView
+            android:id="@+id/quit"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="0.33"
+            android:background="@color/defaultButtonBackgroundColor"
+            android:gravity="bottom|left"
+            android:padding="3dp"
+            android:text="@string/quitButtonText"
+            android:textColor="@color/defaultButtonTextColor"
+            android:textSize="@dimen/defaultButtonTextSize" />
+
+        <TextView
+            android:id="@+id/close"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="0.33"
+            android:background="@color/defaultButtonBackgroundColor"
+            android:gravity="bottom|left"
+            android:padding="3dp"
+            android:text="@string/closeButtonText"
+            android:textColor="@color/defaultButtonTextColor"
+            android:textSize="@dimen/defaultButtonTextSize" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/play_pause"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:background="@color/defaultButtonBackgroundColor"
+        android:gravity="bottom|left"
+        android:padding="3dp"
+        android:text="@string/playPauseButtonText"
+        android:textColor="@color/defaultButtonTextColor"
+        android:textSize="@dimen/defaultButtonTextSize" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|left" >
+
+        <TextView
+            android:id="@+id/jumpMediumBackwards"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="0.33"
+            android:background="@color/defaultButtonBackgroundColor"
+            android:gravity="bottom|left"
+            android:padding="3dp"
+            android:text="@string/jumpMediumBackwardsButtonText"
+            android:textColor="@color/defaultButtonTextColor"
+            android:textSize="@dimen/defaultButtonTextSize" />
+
+        <TextView
+            android:id="@+id/stop"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="0.33"
+            android:background="@color/defaultButtonBackgroundColor"
+            android:padding="3dp"
+            android:text="@string/stopButtonText"
+            android:textColor="@color/defaultButtonTextColor"
+            android:textSize="@dimen/defaultButtonTextSize" />
+
+        <TextView
+            android:id="@+id/jumpMediumForward"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:layout_weight="0.33"
+            android:background="@color/defaultButtonBackgroundColor"
+            android:gravity="bottom|left"
+            android:padding="3dp"
+            android:text="@string/jumpMediumForwardButtonText"
+            android:textColor="@color/defaultButtonTextColor"
+            android:textSize="@dimen/defaultButtonTextSize" />
+    </LinearLayout>
+
+</LinearLayout>

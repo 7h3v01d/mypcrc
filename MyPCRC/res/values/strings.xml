@@ -1,5 +1,18 @@
 <resources>
 
     <string name="applicationName">MyPCRC</string>
+    <string name="leaveFullscreenButtonText">Escape</string>
+    <string name="quitButtonText">Quit</string>
+    <string name="closeButtonText">Close</string>
+    <string name="playPauseButtonText">Play/Pause</string>
+    <string name="jumpMediumBackwardsButtonText">Medium Rew</string>
+    <string name="stopButtonText">Stop</string>
+    <string name="jumpMediumForwardButtonText">Medium FF</string>
+    <string name="jumpExtraShortBackwardsButtonText">Short Rew</string>
+    <string name="jumpExtraShortForwardButtonText">Short FF</string>
+    <string name="volUpButtonText">Volume Up</string>
+    <string name="muteButtonText">Mute</string>
+    <string name="volDownButtonText">Volume Down</string>
+    <string name="toggelFullscreenButtonText">Toggle Fullscreen</string>
 
 </resources>

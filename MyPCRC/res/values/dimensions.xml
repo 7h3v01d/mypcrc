@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="defaultButtonTextColor">#FFFFFF</color>
+    <dimen name="defaultButtonTextSize">18dp</dimen>
+    <color name="defaultButtonBackgroundColor">#002080</color>
+    
+</resources>
