@@ -37,7 +37,7 @@ public class MyPCRC extends Activity {
 		@Override
 		public void onClick(View v) {
 
-			Connection conn = Connection.getInstance();
+			Connection conn = Connection.getInstance(getApplication());
 
 			switch (v.getId()) {
 			case R.id.close:

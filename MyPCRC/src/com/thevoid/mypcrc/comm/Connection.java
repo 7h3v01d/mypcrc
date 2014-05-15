@@ -4,8 +4,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
+import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.DhcpInfo;
 import android.net.wifi.WifiManager;
 import android.text.format.Formatter;
@@ -14,21 +20,40 @@ public class Connection {
 
 	private static Connection instance;
 
+	private Application app;
 	private Socket socket;
 
-	private Connection() {
+	private Connection(Application application) {
+
+		app = application;
 		socket = null;
 	}
 
-	public static synchronized Connection getInstance() {
+	public static synchronized Connection getInstance(Application application) {
 
 		if (instance == null) {
-			instance = new Connection();
-			instance.connect();
-			instance.authenticate();
+			instance = new Connection(application);
 		}
 
 		return instance;
+	}
+
+	private void getKnownHosts(Set<String> hosts) {
+
+		hosts.clear();
+		SharedPreferences preferences = app.getSharedPreferences("settings",
+				Context.MODE_PRIVATE);
+		hosts.addAll(Arrays.asList(preferences.getString("knownHosts",
+				"[192.168.0.26]").split("\\[,\\]")));
+	}
+
+	private void setKnownHosts(Set<String> hosts) {
+
+		SharedPreferences preferences = app.getSharedPreferences("settings",
+				Context.MODE_PRIVATE);
+		Editor edit = preferences.edit();
+		edit.putString("knownHosts", Arrays.toString(hosts.toArray()));
+		edit.commit();
 	}
 
 	public synchronized void connect() {
@@ -38,7 +63,11 @@ public class Connection {
 		}
 
 		if (socket == null) {
-			WifiManager manager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+			HashSet<String> hosts = new HashSet<String>();
+			getKnownHosts(hosts);
+
+			WifiManager manager = (WifiManager) app
+					.getSystemService(Context.WIFI_SERVICE);
 			DhcpInfo info = manager.getDhcpInfo();
 
 			int host = info.ipAddress & info.netmask;
@@ -49,12 +78,18 @@ public class Connection {
 					InetSocketAddress address = new InetSocketAddress(
 							Formatter.formatIpAddress(ip), 10101);
 					socket = new Socket();
-					socket.setSoTimeout(100);
-					socket.setSoLinger(false, 0);
-					socket.setKeepAlive(true);
-					socket.setReuseAddress(false);
+					try {
+						socket.setSoTimeout(100);
+						socket.setSoLinger(false, 0);
+						socket.setKeepAlive(true);
+						socket.setReuseAddress(false);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					try {
 						socket.connect(address, 100);
+						hosts.add(Formatter.formatIpAddress(ip));
+						setKnownHosts(hosts);
 						break;
 					} catch (IllegalArgumentException e) {
 						disconnect();
