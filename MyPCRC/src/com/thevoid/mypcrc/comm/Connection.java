@@ -66,6 +66,29 @@ public class Connection {
 			HashSet<String> hosts = new HashSet<String>();
 			getKnownHosts(hosts);
 
+			for (String host : hosts) {
+				InetSocketAddress address = new InetSocketAddress(host, 10101);
+				socket = new Socket();
+				try {
+					socket.setSoTimeout(100);
+					socket.setSoLinger(false, 0);
+					socket.setKeepAlive(true);
+					socket.setReuseAddress(false);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				try {
+					socket.connect(address, 100);
+					return;
+				} catch (IllegalArgumentException e) {
+					disconnect();
+					e.printStackTrace();
+				} catch (IOException e) {
+					disconnect();
+					e.printStackTrace();
+				}
+			}
+
 			WifiManager manager = (WifiManager) app
 					.getSystemService(Context.WIFI_SERVICE);
 			DhcpInfo info = manager.getDhcpInfo();
@@ -90,7 +113,7 @@ public class Connection {
 						socket.connect(address, 100);
 						hosts.add(Formatter.formatIpAddress(ip));
 						setKnownHosts(hosts);
-						break;
+						return;
 					} catch (IllegalArgumentException e) {
 						disconnect();
 						e.printStackTrace();

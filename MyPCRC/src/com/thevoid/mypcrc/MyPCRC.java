@@ -33,24 +33,6 @@ public class MyPCRC extends Activity {
 		}
 	}
 
-	OnClickListener buttonClickListener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-
-			Connection conn = Connection.getInstance(getApplication());
-
-			switch (v.getId()) {
-			case R.id.close:
-				conn.disconnect();
-				finish();
-				break;
-			case R.id.quit:
-				conn.send("QUIT\r\n".getBytes());
-				break;
-			}
-		}
-	};
-
 	OnTouchListener buttonTouchListener = new OnTouchListener() {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
@@ -71,6 +53,57 @@ public class MyPCRC extends Activity {
 			}
 
 			return false;
+		}
+	};
+
+	OnClickListener buttonClickListener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+
+			Connection conn = Connection.getInstance(getApplication());
+
+			switch (v.getId()) {
+			case R.id.leave_fullscreen:
+				conn.send("FUNC leave-fullscreen\r\n".getBytes());
+				break;
+			case R.id.quit:
+				conn.send("QUIT\r\n".getBytes());
+				break;
+			case R.id.close:
+				conn.disconnect();
+				finish();
+				break;
+			case R.id.play_pause:
+				conn.send("FUNC play-pause\r\n".getBytes());
+				break;
+			case R.id.jumpMediumBackwards:
+				conn.send("FUNC jump-medium\r\n".getBytes());
+				break;
+			case R.id.stop:
+				conn.send("FUNC stop\r\n".getBytes());
+				break;
+			case R.id.jumpMediumForward:
+				conn.send("FUNC jump+medium\r\n".getBytes());
+				break;
+			case R.id.jumpExtraShortBackwards:
+				conn.send("FUNC jump-extrashort\r\n".getBytes());
+				break;
+			case R.id.jumpExtraShortForward:
+				conn.send("FUNC jump+extrashort\r\n".getBytes());
+				break;
+			case R.id.volDown:
+				conn.send("FUNC vol-down\r\n".getBytes());
+				break;
+			case R.id.mute:
+				conn.send("FUNC vol-mute\r\n".getBytes());
+				break;
+			case R.id.volUp:
+				conn.send("FUNC vol-up\r\n".getBytes());
+				break;
+			case R.id.toggelFullscreen:
+				conn.send("FUNC toggle-fullscreen\r\n".getBytes());
+				break;
+			}
 		}
 	};
 }
