@@ -1,5 +1,6 @@
 package com.thevoid.mypcrc.comm;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -45,7 +46,7 @@ public class Connection {
 		SharedPreferences preferences = app.getSharedPreferences("settings",
 				Context.MODE_PRIVATE);
 		hosts.addAll(Arrays.asList(preferences.getString("knownHosts",
-				"[192.168.0.26]").split("\\[,\\]")));
+				"192.168.0.26").split(", ")));
 	}
 
 	private void setKnownHosts(Set<String> hosts) {
@@ -53,7 +54,9 @@ public class Connection {
 		SharedPreferences preferences = app.getSharedPreferences("settings",
 				Context.MODE_PRIVATE);
 		Editor edit = preferences.edit();
-		edit.putString("knownHosts", Arrays.toString(hosts.toArray()));
+		String hostsString = hosts.toString();
+		hostsString = hostsString.substring(1, hostsString.length() - 1);
+		edit.putString("knownHosts", hostsString);
 		edit.commit();
 	}
 
@@ -75,7 +78,7 @@ public class Connection {
 
 	public synchronized void connect() {
 
-		if (isWifiConnected()) { // TODO: !
+		if (!isWifiConnected()) {
 			return;
 		}
 
@@ -99,7 +102,7 @@ public class Connection {
 					e.printStackTrace();
 				}
 				try {
-					socket.connect(address, 100);
+					socket.connect(address, 0);
 					return;
 				} catch (IllegalArgumentException e) {
 					disconnect();
@@ -109,41 +112,25 @@ public class Connection {
 					e.printStackTrace();
 				}
 			}
-
-			WifiManager manager = (WifiManager) app
-					.getSystemService(Context.WIFI_SERVICE);
-			DhcpInfo info = manager.getDhcpInfo();
-
-			int host = info.ipAddress & info.netmask;
-			int net = Integer.reverse(~info.netmask);
-			for (--net; net > 0; net--) {
-				int ip = host | Integer.reverse(net);
-				if (ip != info.ipAddress) {
-					InetSocketAddress address = new InetSocketAddress(
-							Formatter.formatIpAddress(ip), 10101);
-					socket = new Socket();
-					try {
-						socket.setSoTimeout(100);
-						socket.setSoLinger(false, 0);
-						socket.setKeepAlive(true);
-						socket.setReuseAddress(false);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-					try {
-						socket.connect(address, 100);
-						hosts.add(Formatter.formatIpAddress(ip));
-						setKnownHosts(hosts);
-						return;
-					} catch (IllegalArgumentException e) {
-						disconnect();
-						e.printStackTrace();
-					} catch (IOException e) {
-						disconnect();
-						e.printStackTrace();
-					}
-				}
-			}
+			/*
+			 * WifiManager manager = (WifiManager) app
+			 * .getSystemService(Context.WIFI_SERVICE); DhcpInfo info =
+			 * manager.getDhcpInfo();
+			 * 
+			 * int host = info.ipAddress & info.netmask; int net =
+			 * Integer.reverse(~info.netmask); for (--net; net > 0; net--) { int
+			 * ip = host | Integer.reverse(net); if (ip != info.ipAddress) {
+			 * InetSocketAddress address = new InetSocketAddress(
+			 * Formatter.formatIpAddress(ip), 10101); socket = new Socket(); try
+			 * { socket.setSoTimeout(100); socket.setSoLinger(false, 0);
+			 * socket.setKeepAlive(true); socket.setReuseAddress(false); } catch
+			 * (Exception e) { e.printStackTrace(); } try {
+			 * socket.connect(address, 100);
+			 * hosts.add(Formatter.formatIpAddress(ip)); setKnownHosts(hosts);
+			 * return; } catch (IllegalArgumentException e) { disconnect();
+			 * e.printStackTrace(); } catch (IOException e) { disconnect();
+			 * e.printStackTrace(); } } }
+			 */
 		}
 	}
 
@@ -176,9 +163,10 @@ public class Connection {
 
 		if (isConnected()) {
 			try {
-				ByteArrayOutputStream output = (ByteArrayOutputStream) socket
-						.getOutputStream();
+				BufferedOutputStream output = new BufferedOutputStream(
+						socket.getOutputStream(), 64);
 				output.write(data, 0, data.length);
+				output.flush();
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (NullPointerException e) {
@@ -189,7 +177,7 @@ public class Connection {
 		}
 	}
 
-	private synchronized void authenticate() {
-		send("a93abd1ee31d66e5e161c2a27e3f75a7\r\n".getBytes());
+	public synchronized void authenticate() {
+		send("AUTH a93abd1ee31d66e5e161c2a27e3f75a7\r\n".getBytes());
 	}
 }

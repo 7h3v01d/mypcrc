@@ -25,7 +25,7 @@ public class MyPCRC extends Activity {
 		setContentView(R.layout.mypcrc);
 
 		Connection conn = Connection.getInstance(getApplication());
-		conn.connect();
+		conn.authenticate();
 
 		int buttonIds[] = new int[] { R.id.leave_fullscreen, R.id.quit,
 				R.id.close, R.id.play_pause, R.id.jumpMediumBackwards,
@@ -42,8 +42,8 @@ public class MyPCRC extends Activity {
 		}
 
 		PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		lock = manager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK,
-				"MyPCRC");
+		lock = manager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
+				| PowerManager.ON_AFTER_RELEASE, "MyPCRC");
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class MyPCRC extends Activity {
 				conn.send("FUNC leave-fullscreen\r\n".getBytes());
 				break;
 			case R.id.quit:
-				conn.send("QUIT\r\n".getBytes());
+				conn.send("FUNC quit\r\n".getBytes());
 				break;
 			case R.id.close:
 				conn.disconnect();

@@ -151,7 +151,7 @@
         android:layout_weight="0.12" >
 
         <TextView
-            android:id="@+id/volUp"
+            android:id="@+id/volDown"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_margin="1dp"
@@ -178,7 +178,7 @@
             android:textSize="@dimen/defaultButtonTextSize" />
 
         <TextView
-            android:id="@+id/volDown"
+            android:id="@+id/volUp"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_margin="1dp"
