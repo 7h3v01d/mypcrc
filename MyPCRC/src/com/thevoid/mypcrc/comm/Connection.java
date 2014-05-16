@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.DhcpInfo;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.text.format.Formatter;
 
@@ -56,7 +57,27 @@ public class Connection {
 		edit.commit();
 	}
 
+	public boolean isWifiConnected() {
+
+		WifiManager manager = (WifiManager) app
+				.getSystemService(Context.WIFI_SERVICE);
+		if (manager.isWifiEnabled() == false) {
+			return false;
+		}
+
+		WifiInfo info = manager.getConnectionInfo();
+		if (info == null) {
+			return false;
+		}
+
+		return true;
+	}
+
 	public synchronized void connect() {
+
+		if (!isWifiConnected()) {
+			return;
+		}
 
 		if (socket != null) {
 			disconnect();
