@@ -3,20 +3,29 @@ package com.thevoid.mypcrc;
 import com.thevoid.mypcrc.comm.Connection;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 public class MyPCRC extends Activity {
+
+	private WakeLock lock;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.mypcrc);
+
+		Connection conn = Connection.getInstance(getApplication());
+		conn.connect();
 
 		int buttonIds[] = new int[] { R.id.leave_fullscreen, R.id.quit,
 				R.id.close, R.id.play_pause, R.id.jumpMediumBackwards,
@@ -31,7 +40,39 @@ public class MyPCRC extends Activity {
 				button.setOnTouchListener(buttonTouchListener);
 			}
 		}
+
+		PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		lock = manager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK,
+				"MyPCRC");
 	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		Connection conn = Connection.getInstance(getApplication());
+		conn.disconnect();
+	};
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		lock.acquire();
+
+		WindowManager.LayoutParams params = getWindow().getAttributes();
+		params.screenBrightness = 0.025f;
+		getWindow().setAttributes(params);
+	};
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		if (lock != null) {
+			lock.release();
+		}
+	};
 
 	OnTouchListener buttonTouchListener = new OnTouchListener() {
 		@Override

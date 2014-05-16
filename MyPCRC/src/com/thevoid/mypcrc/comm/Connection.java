@@ -75,7 +75,7 @@ public class Connection {
 
 	public synchronized void connect() {
 
-		if (!isWifiConnected()) {
+		if (isWifiConnected()) { // TODO: !
 			return;
 		}
 
