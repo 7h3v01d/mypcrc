@@ -45,8 +45,10 @@ static void server_listen( void );
 static void client_init( void );
 static void client_handle( void );
 static void client_shutdown( void );
-static void client_dump_bytes( char *data, int size );
 static void client_parse( char *data, int size );
+#ifdef DEBUG
+static void client_dump_bytes( char *data, int size );
+#endif /* DEBUG */
 
 
 int main( int argc, char **argv )
@@ -267,7 +269,7 @@ static void client_handle( void )
 		data[size] = '\0';
 #ifdef DEBUG
 		client_dump_bytes( data, size );
-#endif
+#endif /* DEBUG */
 		client_parse( data, size );
 	}
 
@@ -345,7 +347,7 @@ static void client_dump_bytes( char *data, int size )
 
 	free( buf );
 }
-#endif
+#endif /* DENUG */
 
 static void client_parse( char *data, int size )
 {
