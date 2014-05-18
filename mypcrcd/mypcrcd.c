@@ -42,6 +42,7 @@ static int server_init( void );
 static void server_shutdown( void );
 static void server_listen( void );
 
+static void client_init( void );
 static void client_handle( void );
 static void client_shutdown( void );
 static void client_dump_bytes( char *data, int size );
@@ -232,7 +233,17 @@ static void server_listen( void )
 			continue;
 		}
 
+		client_init();
+
 		client_handle();
+	}
+}
+
+static void client_init( void )
+{
+	int keepalive = 1;
+	if( -1 == setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (void *)&keepalive, sizeof(keepalive)) ) {
+		syslog( LOG_ERR, "could not set socket options: %m" );
 	}
 }
 
