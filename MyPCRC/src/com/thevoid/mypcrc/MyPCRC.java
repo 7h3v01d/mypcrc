@@ -65,7 +65,7 @@ public class MyPCRC extends Activity {
 		lock.acquire();
 
 		WindowManager.LayoutParams params = getWindow().getAttributes();
-		params.screenBrightness = 0.025f;
+		params.screenBrightness = 0.02f;
 		getWindow().setAttributes(params);
 
 		executeCommand("echo 0 > /sys/class/leds/button-backlight/brightness");
@@ -74,6 +74,11 @@ public class MyPCRC extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+
+		Connection conn = Connection.getInstance(getApplication());
+		if (conn.isConnected()) {
+			conn.send("FUNC pause\r\n");
+		}
 
 		executeCommand("echo 255 > /sys/class/leds/button-backlight/brightness");
 
@@ -145,50 +150,50 @@ public class MyPCRC extends Activity {
 
 			switch (v.getId()) {
 			case R.id.leave_fullscreen:
-				conn.send("FUNC leave-fullscreen\r\n".getBytes());
+				conn.send("FUNC leave-fullscreen\r\n");
 				break;
 			case R.id.quit:
-				conn.send("FUNC quit\r\n".getBytes());
+				conn.send("FUNC quit\r\n");
 				break;
 			case R.id.close:
 				conn.disconnect();
 				finish();
 				break;
 			case R.id.play_pause:
-				conn.send("FUNC play-pause\r\n".getBytes());
+				conn.send("FUNC play-pause\r\n");
 				break;
 			case R.id.jumpMediumBackwards:
-				conn.send("FUNC jump-medium\r\n".getBytes());
+				conn.send("FUNC jump-medium\r\n");
 				break;
 			case R.id.stop:
-				conn.send("FUNC stop\r\n".getBytes());
+				conn.send("FUNC stop\r\n");
 				break;
 			case R.id.jumpMediumForward:
-				conn.send("FUNC jump+medium\r\n".getBytes());
+				conn.send("FUNC jump+medium\r\n");
 				break;
 			case R.id.jumpExtraShortBackwards:
-				conn.send("FUNC jump-extrashort\r\n".getBytes());
+				conn.send("FUNC jump-extrashort\r\n");
 				break;
 			case R.id.jumpExtraShortForward:
-				conn.send("FUNC jump+extrashort\r\n".getBytes());
+				conn.send("FUNC jump+extrashort\r\n");
 				break;
 			case R.id.volDown:
-				conn.send("FUNC vol-down\r\n".getBytes());
+				conn.send("FUNC vol-down\r\n");
 				break;
 			case R.id.mute:
-				conn.send("FUNC vol-mute\r\n".getBytes());
+				conn.send("FUNC vol-mute\r\n");
 				break;
 			case R.id.volUp:
-				conn.send("FUNC vol-up\r\n".getBytes());
+				conn.send("FUNC vol-up\r\n");
 				break;
 			case R.id.brightDown:
-				conn.send("FUNC bright-down\r\n".getBytes());
+				conn.send("FUNC bright-down\r\n");
 				break;
 			case R.id.toggelFullscreen:
-				conn.send("FUNC toggle-fullscreen\r\n".getBytes());
+				conn.send("FUNC toggle-fullscreen\r\n");
 				break;
 			case R.id.brightUp:
-				conn.send("FUNC bright-up\r\n".getBytes());
+				conn.send("FUNC bright-up\r\n");
 				break;
 			}
 		}

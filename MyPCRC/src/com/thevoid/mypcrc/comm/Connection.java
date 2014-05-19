@@ -103,6 +103,10 @@ public class Connection {
 		return socket != null && !socket.isClosed() && socket.isConnected();
 	}
 
+	public synchronized void send(String data) {
+		send(data.getBytes());
+	}
+
 	public synchronized void send(byte[] data) {
 
 		if (!isConnected()) {
@@ -130,6 +134,6 @@ public class Connection {
 	}
 
 	public synchronized void authenticate() {
-		send("AUTH a93abd1ee31d66e5e161c2a27e3f75a7\r\n".getBytes());
+		send("AUTH a93abd1ee31d66e5e161c2a27e3f75a7\r\n");
 	}
 }
