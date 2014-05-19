@@ -1,5 +1,8 @@
 package com.thevoid.mypcrc;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import com.thevoid.mypcrc.comm.Connection;
 
 import android.app.Activity;
@@ -31,7 +34,8 @@ public class MyPCRC extends Activity {
 				R.id.close, R.id.play_pause, R.id.jumpMediumBackwards,
 				R.id.stop, R.id.jumpMediumForward,
 				R.id.jumpExtraShortBackwards, R.id.jumpExtraShortForward,
-				R.id.volDown, R.id.mute, R.id.volUp, R.id.toggelFullscreen };
+				R.id.volDown, R.id.mute, R.id.volUp, R.id.brightDown,
+				R.id.toggelFullscreen, R.id.brightUp };
 
 		for (int i = 0; i < buttonIds.length; i++) {
 			View button = findViewById(buttonIds[i]);
@@ -63,16 +67,52 @@ public class MyPCRC extends Activity {
 		WindowManager.LayoutParams params = getWindow().getAttributes();
 		params.screenBrightness = 0.025f;
 		getWindow().setAttributes(params);
+
+		executeCommand("echo 0 > /sys/class/leds/button-backlight/brightness");
 	};
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 
+		executeCommand("echo 255 > /sys/class/leds/button-backlight/brightness");
+
 		if (lock != null) {
 			lock.release();
 		}
 	};
+
+	private void executeCommand(String cmd) {
+
+		Runtime runtime = Runtime.getRuntime();
+		Process process = null;
+		DataOutputStream output = null;
+
+		try {
+			process = runtime.exec("su");
+			output = new DataOutputStream(process.getOutputStream());
+			output.writeBytes(cmd + "\n");
+			output.writeBytes("exit\n");
+			output.flush();
+			process.waitFor();
+			runtime.exec(cmd);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} finally {
+			if (output != null) {
+				try {
+					output.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (process != null) {
+				process.destroy();
+			}
+		}
+	}
 
 	OnTouchListener buttonTouchListener = new OnTouchListener() {
 		@Override
@@ -141,8 +181,14 @@ public class MyPCRC extends Activity {
 			case R.id.volUp:
 				conn.send("FUNC vol-up\r\n".getBytes());
 				break;
+			case R.id.brightDown:
+				conn.send("FUNC bright-down\r\n".getBytes());
+				break;
 			case R.id.toggelFullscreen:
 				conn.send("FUNC toggle-fullscreen\r\n".getBytes());
+				break;
+			case R.id.brightUp:
+				conn.send("FUNC bright-up\r\n".getBytes());
 				break;
 			}
 		}

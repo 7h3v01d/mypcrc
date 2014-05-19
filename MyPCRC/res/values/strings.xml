@@ -10,9 +10,11 @@
     <string name="jumpMediumForwardButtonText">Medium FF</string>
     <string name="jumpExtraShortBackwardsButtonText">Short Rew</string>
     <string name="jumpExtraShortForwardButtonText">Short FF</string>
-    <string name="volUpButtonText">Volume Up</string>
-    <string name="muteButtonText">Mute</string>
     <string name="volDownButtonText">Volume Down</string>
+    <string name="muteButtonText">Mute</string>
+    <string name="volUpButtonText">Volume Up</string>
+    <string name="brightDownButtonText">Brighness Down</string>
     <string name="toggelFullscreenButtonText">Toggle Fullscreen</string>
+    <string name="brightUpButtonText">Brighness Up</string>
 
 </resources>

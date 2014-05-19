@@ -58,7 +58,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
-        android:layout_weight="0.22"
+        android:layout_weight="0.26"
         android:background="@color/defaultButtonBackgroundColor"
         android:gravity="bottom|left"
         android:padding="3dp"
@@ -191,17 +191,50 @@
             android:textSize="@dimen/defaultButtonTextSize" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/toggelFullscreen"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="1dp"
-        android:layout_weight="0.16"
-        android:background="@color/defaultButtonBackgroundColor"
-        android:gravity="bottom|left"
-        android:padding="3dp"
-        android:text="@string/toggelFullscreenButtonText"
-        android:textColor="@color/defaultButtonTextColor"
-        android:textSize="@dimen/defaultButtonTextSize" />
+        android:layout_weight="0.12" >
+
+        <TextView
+            android:id="@+id/brightDown"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="0.33"
+            android:background="@color/defaultButtonBackgroundColor"
+            android:gravity="bottom|left"
+            android:padding="3dp"
+            android:text="@string/brightDownButtonText"
+            android:textColor="@color/defaultButtonTextColor"
+            android:textSize="@dimen/defaultButtonTextSize"
+            tools:ignore="NestedWeights" />
+
+        <TextView
+            android:id="@+id/toggelFullscreen"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="0.33"
+            android:background="@color/defaultButtonBackgroundColor"
+            android:gravity="bottom|left"
+            android:padding="3dp"
+            android:text="@string/toggelFullscreenButtonText"
+            android:textColor="@color/defaultButtonTextColor"
+            android:textSize="@dimen/defaultButtonTextSize" />
+
+        <TextView
+            android:id="@+id/brightUp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="0.33"
+            android:background="@color/defaultButtonBackgroundColor"
+            android:gravity="bottom|left"
+            android:padding="3dp"
+            android:text="@string/brightUpButtonText"
+            android:textColor="@color/defaultButtonTextColor"
+            android:textSize="@dimen/defaultButtonTextSize" />
+    </LinearLayout>
 
 </LinearLayout>
