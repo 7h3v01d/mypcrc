@@ -67,7 +67,7 @@ int main( int argc, char **argv )
 
 	daemon( 0, 0 );
 
-	openlog( "mypcrc", LOG_NOWAIT | LOG_PID, LOG_USER );
+	openlog( "mypcrcd", LOG_NOWAIT | LOG_PID, LOG_USER );
 
 	signal( SIGTERM, terminate );
 
@@ -90,8 +90,8 @@ int main( int argc, char **argv )
 static void help( void )
 {
 	printf(
-		"mypcrc - a daemon for my pc remote control\n"
-		"usage: mypcrc [-h | --help]\n"
+		"mypcrcd - a daemon for my pc remote control\n"
+		"usage: mypcrcd [-h | --help]\n"
 		"options:\n"
 		"  -h, --help  show this help\n"
 	);
