@@ -442,6 +442,14 @@ static void client_parse( char *data, int size )
 		if( IS_FUNC("jump+medium\r\n") ) {
 			x11_send_keystroke( !0, 0, 0, XK_Right ); /* Ctrl+Right */
 		}
+		else
+		if( IS_FUNC("bright-up\r\n") ) {
+			x11_send_keystroke( 0, 0, 0, XF86XK_MonBrightnessUp );
+		}
+		else
+		if( IS_FUNC("bright-down\r\n") ) {
+			x11_send_keystroke( 0, 0, 0, XF86XK_MonBrightnessDown );
+		}
 		else {
 			syslog( LOG_ERR, "unknown function from client" );
 			client_shutdown();
