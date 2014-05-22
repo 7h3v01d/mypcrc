@@ -6,15 +6,23 @@ import java.io.IOException;
 import com.thevoid.mypcrc.comm.Connection;
 
 import android.app.Activity;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.text.Editable;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class MyPCRC extends Activity {
@@ -86,6 +94,59 @@ public class MyPCRC extends Activity {
 			lock.release();
 		}
 	};
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu, menu);
+
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+		case R.id.brightnessMenuOption:
+			break;
+		case R.id.hostMenuOption:
+			showHostConfiguration();
+			break;
+		}
+
+		return true;
+	}
+
+	private void showHostConfiguration() {
+
+		LayoutInflater inflater = getLayoutInflater();
+		final View hostLayout = inflater.inflate(R.layout.host, null);
+
+		EditText edit = (EditText) hostLayout.findViewById(R.id.host);
+		Connection conn = Connection.getInstance(getApplication());
+		String host = conn.getHost();
+		edit.setText(host);
+
+		Builder builder = new Builder(this);
+		builder.setTitle(R.string.hostConfigurationTitleText);
+		builder.setView(hostLayout);
+		builder.setPositiveButton(R.string.positiveButtonText,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						EditText edit = (EditText) hostLayout
+								.findViewById(R.id.host);
+						Editable text = edit.getEditableText();
+						Connection conn = Connection
+								.getInstance(getApplication());
+						conn.setHost(text.toString());
+						conn.disconnect();
+					}
+				});
+		builder.setNegativeButton(R.string.negativeButtonText, null);
+		builder.show();
+	}
 
 	private void executeCommand(String cmd) {
 

@@ -7,6 +7,8 @@ import java.net.Socket;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
@@ -30,6 +32,22 @@ public class Connection {
 		}
 
 		return instance;
+	}
+
+	public String getHost() {
+
+		SharedPreferences preferences = app.getSharedPreferences("mypcrc",
+				Context.MODE_PRIVATE);
+		return preferences.getString("host", "192.168.0.26");
+	}
+
+	public void setHost(String host) {
+
+		SharedPreferences preferences = app.getSharedPreferences("mypcrc",
+				Context.MODE_PRIVATE);
+		Editor edit = preferences.edit();
+		edit.putString("host", host);
+		edit.commit();
 	}
 
 	public boolean isWifiConnected() {
@@ -59,8 +77,8 @@ public class Connection {
 		}
 
 		if (socket == null) {
-			InetSocketAddress address = new InetSocketAddress("192.168.0.26",
-					10101);
+			String host = getHost();
+			InetSocketAddress address = new InetSocketAddress(host, 10101);
 			socket = new Socket();
 			try {
 				socket.setSoTimeout(100);

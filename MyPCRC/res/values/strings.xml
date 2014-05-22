@@ -16,5 +16,10 @@
     <string name="brightDownButtonText">Brighness Down</string>
     <string name="toggelFullscreenButtonText">Toggle Fullscreen</string>
     <string name="brightUpButtonText">Brighness Up</string>
+    <string name="brightnessMenuText">Brighness</string>
+    <string name="hostMenuText">Host</string>
+    <string name="hostConfigurationTitleText">Host configuration</string>
+    <string name="positiveButtonText">OK</string>
+    <string name="negativeButtonText">Cancel</string>
 
 </resources>
