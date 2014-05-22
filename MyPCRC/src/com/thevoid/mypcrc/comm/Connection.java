@@ -50,6 +50,22 @@ public class Connection {
 		edit.commit();
 	}
 
+	public float getBrightness() {
+
+		SharedPreferences preferences = app.getSharedPreferences("mypcrc",
+				Context.MODE_PRIVATE);
+		return preferences.getFloat("brightness", 0.02f);
+	}
+
+	public void setBrightness(float brightness) {
+
+		SharedPreferences preferences = app.getSharedPreferences("mypcrc",
+				Context.MODE_PRIVATE);
+		Editor edit = preferences.edit();
+		edit.putFloat("brightness", brightness);
+		edit.commit();
+	}
+
 	public boolean isWifiConnected() {
 
 		WifiManager manager = (WifiManager) app

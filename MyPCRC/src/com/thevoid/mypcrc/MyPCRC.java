@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
@@ -73,7 +74,8 @@ public class MyPCRC extends Activity {
 		lock.acquire();
 
 		WindowManager.LayoutParams params = getWindow().getAttributes();
-		params.screenBrightness = 0.02f;
+		Connection conn = Connection.getInstance(getApplication());
+		params.screenBrightness = conn.getBrightness();
 		getWindow().setAttributes(params);
 
 		executeCommand("echo 0 > /sys/class/leds/button-backlight/brightness");
@@ -109,6 +111,8 @@ public class MyPCRC extends Activity {
 
 		switch (item.getItemId()) {
 		case R.id.brightnessMenuOption:
+			Intent brightness = new Intent(this, Brightness.class);
+			startActivity(brightness);
 			break;
 		case R.id.hostMenuOption:
 			showHostConfiguration();
