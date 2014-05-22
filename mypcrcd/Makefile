@@ -30,3 +30,4 @@ help:
 	@echo Required packages:
 	@echo libx11-dev
 	@echo libxext-dev
+	@echo libxtst-dev
