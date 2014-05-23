@@ -146,6 +146,7 @@ public class MyPCRC extends Activity {
 								.getInstance(getApplication());
 						conn.setHost(text.toString());
 						conn.disconnect();
+						conn.connect();
 					}
 				});
 		builder.setNegativeButton(R.string.negativeButtonText, null);
