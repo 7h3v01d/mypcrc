@@ -105,7 +105,7 @@ public class Connection {
 				e.printStackTrace();
 			}
 			try {
-				socket.connect(address, 0);
+				socket.connect(address, 1000);
 				return;
 			} catch (IllegalArgumentException e) {
 				disconnect();
@@ -120,13 +120,11 @@ public class Connection {
 	public synchronized void disconnect() {
 
 		if (socket != null) {
-			if (socket.isConnected()) {
-				if (!socket.isClosed()) {
-					try {
-						socket.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+			if (socket.isConnected() || !socket.isClosed()) {
+				try {
+					socket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
 			socket = null;
