@@ -122,6 +122,13 @@ public class MyPCRC extends Activity {
 		return true;
 	}
 
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+
+		System.exit(0);
+	}
+
 	private void showHostConfiguration() {
 
 		LayoutInflater inflater = getLayoutInflater();
