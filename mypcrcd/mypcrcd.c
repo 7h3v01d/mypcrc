@@ -214,6 +214,7 @@ static void server_shutdown( void )
 	if( -1 != sock ) {
 		run = 0;
 		shutdown( sock, SHUT_RDWR );
+		close( sock );
 		sock = -1;
 	}
 }
@@ -280,6 +281,7 @@ static void client_shutdown( void )
 {
 	if( -1 != fd ) {
 		shutdown( fd, SHUT_RDWR );
+		close( fd );
 		fd = -1;
 		auth = 0;
 	}
