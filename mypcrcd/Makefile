@@ -10,13 +10,13 @@ run:
 	./mypcrcd
 
 stop:
-	killall -15 mypcrcd
+	@killall -15 mypcrcd || echo -n
 
 kill:
-	killall -9 mypcrcd
+	@killall -9 mypcrcd || echo "mypcrcd is not running"
 
 show:
-	@ps aux | grep mypcrcd | grep -v grep
+	@ps aux | grep mypcrcd | grep -v grep || echo "mypcrcd: no process found"
 
 tail:
 	@tail -f /var/log/syslog
@@ -30,3 +30,5 @@ help:
 	@echo Required packages:
 	@echo libx11-dev
 	@echo libxtst-dev
+	@echo Just run:
+	@echo sudo apt-get install libx11-dev libxtst-dev
